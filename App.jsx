@@ -11,20 +11,40 @@ function App() {
     yearInvestment: 10,
   });
 
+  const [error, setError] = useState("");
+
   const handleInputChange = (inputIdentifier, newValue) => {
+    const numericValue = +newValue;
+
+    if (newValue.trim() === "") {
+      setError("Fields cannot be empty.");
+      return;
+    }
+
+    if (numericValue < 0) {
+      setError("Values cannot be negative.");
+      return;
+    }
+
+    setError("");
+
     setUserInput((prevInput) => ({
       ...prevInput,
-      [inputIdentifier]: +newValue,
+      [inputIdentifier]: numericValue,
     }));
   };
 
   return (
     <>
       <Header />
+
+      {error && <p className="error">{error}</p>}
+
       <UserInput
         inputCust={userInput}
         onChangeCustInput={handleInputChange}
       />
+
       <OutputData inputVal={userInput} />
     </>
   );
